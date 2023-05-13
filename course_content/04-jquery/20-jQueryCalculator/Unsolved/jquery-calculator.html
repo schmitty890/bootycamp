@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery Calculator</title>
+    <!-- Added link to the jQuery Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Added a link to Bootstrap-->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" type="text/css">
+    <style type="text/css">
+    .strike {
+        text-decoration: line-through;
+    }
+
+    i {
+        font-size: 36px !important;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <!-- Calculator Panel -->
+            <div class="col-lg-12">
+                <input class="form-control form-control-lg" type="text" placeholder="Enter your To-Do">
+                <button type="button" class="btn btn-success">Post</button>
+                <ul class="list-group">
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    $(document).ready(function() {
+
+        var toDoList = {
+            postToDo: function() {
+                $(document.body).on('click', '.btn-success', function() {
+                    var toDoItem = $('.form-control').val();
+                    console.log(toDoItem);
+                    $('.list-group').append(`
+                <li class="list-group-item">` + toDoItem + `
+                  <i class="fa fa-check-square pull-right done"></i>
+                  <i class="fa fa-minus-circle pull-right delete"></i>
+                  <i class="fa fa-edit pull-right edit"></i>
+                </li>
+              `);
+                    $('.form-control').val('');
+                });
+            },
+            done: function() {
+                $(document.body).on('click', '.done', function() {
+                    $(this).parents('.list-group-item').addClass('strike');
+                });
+            },
+            edit: function() {
+                $(document.body).on('click', '.edit', function() {
+                    $(this).parents('.list-group-item').append('<button class="save">Save</button>');
+                    $(this).parents('.list-group-item').attr('contenteditable', 'true');
+                });
+            },
+            delete: function() {
+                $(document.body).on('click', '.delete', function() {
+                    $(this).parents('.list-group-item').remove();
+                });
+            },
+            save: function() {
+                $(document.body).on('click', '.save', function() {
+                    $(this).parents('.list-group-item').attr('contenteditable', 'false');
+                    $(this).remove();
+                });
+            },
+            init: function() {
+                toDoList.postToDo();
+                toDoList.done();
+                toDoList.edit();
+                toDoList.delete();
+                toDoList.save();
+            }
+        };
+
+        toDoList.init();
+
+
+    });
+    </script>
+</body>
+
+</html>

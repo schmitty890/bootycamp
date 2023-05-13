@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Captain Planet: The Game</title>
+
+  <!-- Bootstrap File -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+
+  <!-- JQuery -->
+  <script src="https://code.jquery.com/jquery.js"></script>
+
+</head>
+<body>
+
+  <!-- Overall Bootstrap Grid -->
+  <div class="container">
+
+    <!-- Jumbotron with Title -->
+    <div class="jumbotron">
+      <h1 class="text-center">
+        <strong>Captain Planet</strong>
+      </h1>
+      <hr>
+      <div id="musicControls" class="text-center">
+        <button class="btn btn-warning btn-xs theme-button">
+          <span class="glyphicon glyphicon-music"></span> Play Theme!</button>
+        <button class="btn btn-dark btn-xs pause-button">
+          <span class="glyphicon glyphicon-pause"></span> Pause Song</button>
+      </div>
+
+    </div>
+    <div class="row">
+
+      <div class="col-lg-6">
+
+        <!-- Controls (Superpower Grow/Shrink)-->
+        <div id="sizeControls" class="card">
+          <h4 class="card-header">Superpowers - Change Sizes!</h4>
+          <div class="card-body">
+            <div class="text-center">
+              <button class="btn btn-dark btn-lg normal-button">
+                <span class="glyphicon glyphicon-ok-sign"></span> Normal</button>
+              <button class="btn btn-primary btn-lg grow-button">
+                <span class="glyphicon glyphicon-plus-sign"></span> Grow</button>
+              <button class="btn btn-danger btn-lg shrink-button">
+                <span class="glyphicon glyphicon-minus-sign"></span> Shrink</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls (Superpower Visibility) -->
+        <div id="visibilityControls" class="card">
+          <h4 class="card-header">Superpowers - Invisiblity!</h4>
+          <div class="card-body">
+            <div class="text-center">
+              <button class="btn btn-dark btn-lg vis-button">
+                <span class="glyphicon glyphicon-eye-open"></span> Visible</button>
+              <button class="btn btn-info btn-lg invis-button">
+                <span class="glyphicon glyphicon-eye-close"></span> Invisible</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls (Superpower Move Controls) -->
+        <div id="moveControls" class="card">
+          <h4 class="card-header">Move Controls</h4>
+          <div class="card-body">
+            <div class="text-center mb-1">
+              <button class="btn btn-dark btn-lg up-button">Up</button>
+            </div>
+            <div class="text-center">
+              <button class="btn btn-dark btn-lg left-button">Left</button>
+              <button class="btn btn-dark btn-lg down-button">Down</button>
+              <button class="btn btn-dark btn-lg right-button">Right</button>
+            </div>
+            <br>
+            <div class="text-center">
+              <button class="btn btn-dark btn-lg back-button">
+                <span class="glyphicon glyphicon-comment"></span> Go Planet!</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls (Stretch) -->
+        <div id="stretchControls" class="card">
+          <h4 class="card-header">Stretch</h4>
+          <div class="card-body">
+            <div class="text-center">
+              <button class="btn btn-dark btn-lg stretch-button">
+                <span class=""></span> Stretch</button>
+              <button class="btn btn-dark btn-lg un-stretch-button">
+                <span class=""></span> Un Stretch</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls (Maniacal Sound) -->
+        <div id="maniacalControls" class="card">
+          <h4 class="card-header">Maniacal Sound</h4>
+          <div class="card-body">
+            <div class="text-center">
+              <button class="btn btn-dark btn-lg maniacal-play-button">
+                <span class=""></span> Play Maniacal Sound</button>
+              <button class="btn btn-dark btn-lg maniacal-stop-button">
+                <span class=""></span> Stop Maniacal Sound</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls (Clone) -->
+        <div id="cloneControls" class="card">
+          <h4 class="card-header">Clone Captain America</h4>
+          <div class="card-body">
+            <div class="text-center">
+              <button class="btn btn-dark btn-lg clone-button">
+                <span class=""></span> Clone Captain America</button>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Controls (Shield) -->
+        <div id="shieldControls" class="card">
+          <h4 class="card-header">Shield Sound</h4>
+          <div class="card-body">
+            <div class="text-center">
+              <button class="btn btn-dark btn-lg add-shield-button">
+                <span class=""></span> Shield Controls</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls (Fire/Water) -->
+        <div id="fireWaterControls" class="card">
+          <h4 class="card-header">Fire Water</h4>
+          <div class="card-body">
+            <div class="text-center">
+              <button class="btn btn-dark btn-lg fire-button">
+                <span class=""></span> Fire Controls</button>
+              <button class="btn btn-dark btn-lg water-button">
+                <span class=""></span> Water Controls</button>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <!-- Right Panel (Captain Planet Hero)-->
+      <div class="col-lg-6">
+        <div class="image-wrapper">
+        <!-- Captain Planet Image -->
+        <img src="Assets/captain-planet.jpg" alt="" class="img captain-planet">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+  // JavaScript function that wraps everything
+  $(document).ready(function() {
+
+    var captainPlanet = $(".captain-planet");
+
+    // Gets Link for Theme Song
+    var audioElement = document.createElement("audio");
+    audioElement.setAttribute("src", "Assets/captainplanet24.mp3");
+
+    // Theme Button
+    $("#musicControls").on("click", ".theme-button", function() {
+      audioElement.play();
+    }).on("click", ".pause-button", function() {
+      audioElement.pause();
+    });
+
+    // Size Buttons
+    $("#sizeControls").on("click", ".normal-button", function() {
+      captainPlanet = $(".captain-planet");
+      captainPlanet.animate({ height: "300px" });
+    }).on("click", ".grow-button", function() {
+      captainPlanet = $(".captain-planet");
+      captainPlanet.animate({ height: "500px" });
+    }).on("click", ".shrink-button", function() {
+      captainPlanet = $(".captain-planet");
+      captainPlanet.animate({ height: "100px" });
+    });
+
+    // Visibility Buttons
+    $("#visibilityControls").on("click", ".vis-button", function() {
+      captainPlanet = $(".captain-planet");
+      captainPlanet.animate({ opacity: "1" });
+    }).on("click", ".invis-button", function() {
+      captainPlanet = $(".captain-planet");
+      captainPlanet.animate({ opacity: "0.05" });
+    });
+
+    // Move Buttons
+    $("#moveControls").on("click", ".up-button", function() {
+      captainPlanet = $(".captain-planet");
+      captainPlanet.animate({ top: "-=200px" }, "normal");
+    }).on("click", ".down-button", function() {
+      captainPlanet = $(".captain-planet");
+      captainPlanet.animate({ top: "+=200px" }, "normal");
+    }).on("click", ".left-button", function() {
+      captainPlanet = $(".captain-planet");
+      captainPlanet.animate({ left: "-=200px" }, "normal");
+    }).on("click", ".right-button", function() {
+      captainPlanet = $(".captain-planet");
+      captainPlanet.animate({ left: "+=200px" }, "normal");
+    }).on("click", ".back-button", function() {
+      captainPlanet = $(".captain-planet");
+      captainPlanet.animate({ top: "50px", left: "80px" }, "fast");
+    });
+
+    // Keyboard move controls
+    $(document).keyup(function(e) {
+      captainPlanet = $(".captain-planet");
+      switch (e.which) {
+
+      // Move Buttons (Keyboard Down)
+      case 40:
+        captainPlanet.animate({ top: "+=200px" }, "normal");
+        break;
+
+        // Move Buttons (Keyboard Right)
+      case 39:
+        captainPlanet.animate({ left: "+=200px" }, "normal");
+        break;
+
+        // Move Buttons (Keyboard Up)
+      case 38:
+        captainPlanet.animate({ top: "-=200px" }, "normal");
+        break;
+
+        // Move Buttons (Keyboard Left)
+      case 37:
+        captainPlanet.animate({ left: "-=200px" }, "normal");
+        break;
+
+      default:
+        break;
+      }
+    });
+
+    //Stetch controls
+    $('#stretchControls').on('click', '.stretch-button', function() {
+      captainPlanet = $(".captain-planet");
+      captainPlanet.animate({width: "+=200px"});
+    }).on('click', '.un-stretch-button', function() {
+      captainPlanet = $(".captain-planet");
+      captainPlanet.animate({width: "-=200px"});
+    });
+
+    //Maniacal Sound Controls
+    $('#maniacalControls').on('click', '.maniacal-play-button', function() {
+      captainPlanet = $(".captain-planet");
+    }).on('click', '.maniacal-stop-button', function() {
+    });
+
+    //Clone Controls
+    $('#cloneControls').on('click', '.clone-button', function() {
+      captainPlanet.clone().appendTo( ".image-wrapper" );
+    });
+
+
+    //Shield Controls
+    $('#shieldControls').on('click', '.add-shield-button', function() {
+      captainPlanet = $(".captain-planet");
+      captainPlanet.css('border', '5px solid #002d5c');
+    }).on('click', '.remove-shiled-button', function() {
+      captainPlanet = $(".captain-planet");
+      captainPlanet.css('border', '5px solid #002d5c');
+    });
+
+    //fire/water Controls
+    $('#fireWaterControls').on('click', '.fire-button', function() {
+      captainPlanet = $(".captain-planet");
+      captainPlanet.attr('src', 'https://vignette.wikia.nocookie.net/captainplanet/images/9/9f/Flame.png/revision/latest/scale-to-width-down/170?cb=20150723033411');
+    }).on('click', '.water-button', function() {
+      captainPlanet = $(".captain-planet");
+      captainPlanet.attr('src', 'https://www.zak.com/thumbnail.asp?file=assets/images/items/zak_kids/superhero/MRTL-K951_ZakDesigns.jpg&maxx=800&maxy=0');
+    });
+
+
+  });
+
+  </script>
+
+</body>
+</html>
