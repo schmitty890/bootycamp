@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Favorite Movies</title>
+  <style type="text/css">
+    button,
+    div,
+    form,
+    input {
+      margin: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>Movie Search</h1>
+
+    <!-- Movies will get dumped here -->
+    <div id="movies-view"></div>
+
+    <form id="movie-form">
+      <label for="movie-input">Add a Movie Bro</label>
+      <input type="text" id="movie-input"><br>
+
+      <!-- Button triggers new movie to be added -->
+      <input id="add-movie" type="submit" value="Add a Movie Bro">
+    </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      // Initial array of movies
+      var movies = ["The Matrix", "The Notebook", "Mr. Nobody", "The Lion King"];
+
+      // Function for displaying movie data
+      function renderButtons() {
+
+        //// VANILLA JS
+        var moviesDiv = document.querySelector('#movies-view');
+        moviesDiv.innerHTML = '';
+
+        movies.forEach(function(element) {
+          var newBtn = document.createElement("button");
+          var text = document.createTextNode(element);
+          newBtn.appendChild(text);
+          moviesDiv.appendChild(newBtn);
+        });
+
+        //// JQUERY WAY
+        // movies.forEach(function(element) {
+        //   $('#movies-view').append(`<button>${element}</button>`);
+        // });
+
+      }
+
+      // This function handles events where one button is clicked
+      $("#add-movie").on("click", function(event) {
+        event.preventDefault();
+        //// JS WAY
+        var userText = document.querySelector('#movie-input').value.trim();
+        // JQUERY WAY
+        // var userText = $('#movie-input').val().trim();
+
+        // pass userText to check if it is blank or duplicated
+        checkBlankAndDuplicated(userText);
+
+        document.querySelector('#movie-input').value = '';
+        // $('#movie-input').val('');
+
+      });
+
+      function checkBlankAndDuplicated(userText) {
+        if(userText === '' || movies.includes(userText)) {
+          console.log('blank or in the array dont push to array');
+        }else {
+          movies.push(userText);
+          renderButtons();
+        }
+      }
+
+      // Calling the renderButtons function to display the initial list of movies
+      renderButtons();
+    </script>
+  </div>
+</body>
+
+</html>

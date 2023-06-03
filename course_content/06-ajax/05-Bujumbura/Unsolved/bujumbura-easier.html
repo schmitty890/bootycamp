@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Bujumbura Data</title>
+</head>
+
+<body>
+  <!-- Retrieved data will be dumped here -->
+  <div class="city"></div>
+  <div class="wind"></div>
+  <div class="humidity"></div>
+  <div class="temp"></div>
+  <input type="text" name="citydata" id="search"/>
+  <button onclick="searchCity()">search</button>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    
+    function searchCity() {
+      var value = $('#search').val();
+      getWeather(value);
+    }
+
+    function getWeather(city) {
+      // This is our API key. Add your own API key between the ""
+      var APIKey = "4d349d6381e7b668c45d441f4824d882";
+
+      // Here we are building the URL we need to query the database
+      var queryURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=` + APIKey;
+
+      var request = new XMLHttpRequest();
+      request.open('GET', queryURL, true);
+
+      request.onload = function() {
+        if (request.status >= 200 && request.status < 400) {
+          // Success!
+          var resp = request.responseText;
+          resp = JSON.parse(resp)
+          // console.log(resp);
+          updateText(resp);
+        } else {
+          // We reached our target server, but it returned an error
+        }
+      };
+
+      request.onerror = function() {
+        // There was a connection error of some sort
+      };
+
+      request.send();
+
+      function updateText(resp) {
+        document.querySelector(".city").innerHTML = resp.name;
+        document.querySelector(".wind").innerHTML = resp.wind.speed;
+        document.querySelector(".humidity").innerHTML = resp.main.humidity;      
+        document.querySelector('.temp').innerHTML = convertTemp(resp.main.temp)
+      }
+
+      // We then created an AJAX call
+      // $.ajax({
+      //   url: queryURL,
+      //   method: "GET"
+      // }).then(function(response) {
+      //   // Create CODE HERE to Log the queryURL
+      //   console.log(queryURL);
+      //   // Create CODE HERE to log the resulting object
+      //   console.log(response);
+      //   // Create CODE HERE to transfer content to HTML
+      //   $('.city').text(response.name);
+      //   $('.wind').text(response.wind.speed);
+      //   $('.humidity').text(response.main.humidity);
+      //   // Create CODE HERE to calculate the temperature (converted from Kelvin)
+      //   var fahrenheit = (response.main.temp - 273.15) * 1.8 + 32;
+      //   // Hint: To convert from Kelvin to Fahrenheit: F = (K - 273.15) * 1.80 + 32
+      //   // Create CODE HERE to dump the temperature content into HTML
+      //   $('.temp').text(fahrenheit);
+    }
+
+    function convertTemp(K) {
+      return (K - 273.15) * 1.80 + 32;
+    }
+
+
+    // });
+  </script>
+</body>
+
+</html>
