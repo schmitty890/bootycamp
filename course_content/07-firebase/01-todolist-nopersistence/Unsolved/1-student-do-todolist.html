@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html lang="en-us">
+
+<head>
+
+  <meta charset="UTF-8">
+  <title>To Do App!</title>
+
+  <style>
+    body {
+      background-image: url("https://i.stack.imgur.com/s3BcM.png");     
+      background-size: cover;
+      background-repeat: no-repeat;
+    }; 
+    
+    h1 {
+      color: black;
+      margin-top: 50px;
+      text-align: center; 
+      padding-bottom: 2%; 
+      font-family: helvetica;
+    };
+    
+    
+    #todo-item {
+      font-weight: 700;
+      font-size: 2em; 
+    
+    };
+    
+
+    
+    
+  </style>
+  
+</head>
+
+<body>
+
+  <!-- Title -->
+  <h1>My To Do's!</h1>
+
+  <!-- Input Form -->
+  <form>
+    <span id="todo-item">To Do Item: <input id="to-do" type="text" ><input id="add-to-do" value="Add Item" type="submit"></span>
+  </form>
+
+  <hr>
+
+  <!-- To-Do List -->
+  <div id="to-dos"></div>
+
+  <!-- jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <!-- Script -->
+  <script>
+    //  ============================= START CODING BELOW! =============================================
+    var toDoCount = 1;
+    // define array as local storage toDoItems or empty array
+    var toDoArray = JSON.parse(localStorage.getItem("toDoItems")) || [];
+    
+    // loop over toDoArray
+    toDoArray.forEach(function(toDoItem, toDoCount) {  
+      var newHTML = `<p id="item-${toDoCount}"><button id="button-${toDoCount}" data-to-do="${toDoCount}" class="checkbox">X</button>${toDoItem}</p>`;
+      $('#to-dos').prepend(newHTML);
+    });
+    // Create an initial toDoCount variable
+    //  On Click event associated with the add-to-do function
+    $("#add-to-do").on("click", function(event) {
+      // prevent form from submitting
+      event.preventDefault();
+
+      // Get the to-do "value" from the textbox and store it a variable
+      var toDoItem = $("#to-do").val();
+      console.log(toDoItem);
+
+      // Create a new variable that will hold a "<p>" tag.
+      // Then give it an ID in the following form:
+      // "item-4" or "item-3" or "item-99", where the number is equal to toDoCount.
+      // Then append the to-do "value" as text to this <p> element.
+
+      // Create a button with unique identifiers based on what number it is in the list. Again use jQuery to do this.
+      // Give your button a data attribute called data-to-do and a class called "checkbox".
+      // Lastly append the letter X inside.
+      
+      var newHTML = createHTMLSnippet(toDoCount, toDoItem);
+
+      // Append the button to the to do item
+      
+
+      // Add the button and toDoItem to the to-dos div
+      $("#to-dos").prepend(newHTML);
+      
+
+      // Clear the textbox when done
+      $("#to-do").val("");
+      
+      //push item to toDoArray
+      toDoArray.push(toDoItem);
+      //save toDoArray in local storage as toDoItems
+      localStorage.setItem("toDoItems", JSON.stringify(toDoArray));
+
+      // Add to the toDoCount
+      toDoCount++;
+    });
+
+    //  When a user clicks a check box then delete the specific content
+    //  (NOTE: Pay attention to the unusual syntax here for the click event.
+    //  Because we are creating click events on "dynamic" content, we can't just use the usual "on" "click" syntax.)
+    $(document.body).on("click", ".checkbox", function() {
+
+      // Get the number of the button from its data attribute and hold in a variable called  toDoNumber.
+      var toDoNumber = $(this).attr("data-to-do");
+      toDoNumber = toDoNumber.substring(toDoNumber.length - 1);
+      var idToDo = 'item-' + toDoNumber;
+      
+      //splice array - remove selected index from array
+      toDoArray.splice(toDoNumber, 1);
+      
+      //save local storage again
+      localStorage.setItem("toDoItems", JSON.stringify(toDoArray));
+      
+      // Select and Empty the specific <p> element that previously held the to do item number.
+      $(`#${idToDo}`).empty();
+
+    });
+    function createHTMLSnippet(toDoCount, toDoItem) {
+      var newHTML = `<p id="item-${toDoCount}"><button id="button-${toDoCount}" data-to-do="${toDoCount}" class="checkbox">X</button>${toDoItem}</p>`; 
+      return newHTML;
+    }
+  </script>
+
+</body>
+
+</html>

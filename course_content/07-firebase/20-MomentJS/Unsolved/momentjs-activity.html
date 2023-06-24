@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html lang="en-us">
+
+<head>
+
+  <meta charset="UTF-8">
+  <title>Moment JS Exercises</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.0/moment.js"></script>
+</head>
+
+<body>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery.js"></script>
+
+  <!-- Link to Moment.js should go here -->
+
+
+  <script>
+    var randomDate = "02/23/1999";
+    var momentRandomDate = moment(randomDate);
+
+    // Using scripts from moment.js write code below to complete each of the following.
+    // Console.log to confirm the code changes we made worked.
+    // 1 ...to convert the randomDate into three other date formats
+    var formatOne = moment(randomDate).format();
+    var formatTwo = moment(randomDate).format("dddd, MMMM Do YYYY, h:mm:ss a");
+    var formatThree = moment(randomDate).format("ddd, hA");
+    console.log(formatOne);
+    console.log(formatTwo);
+    console.log(formatThree);
+    // 2 ...to determine the time in years, months, days between today and the randomDate
+    var formatFour = moment(randomDate).fromNow();
+    console.log(formatFour);
+    // 3 ...to determine the number of days between the randomDate and 02/14/2001
+    var newDate = moment([2001, 1, 14]);
+    var formatFive = momentRandomDate.to(newDate);
+    console.log(formatFive);
+    // 4 ...to convert the randomDate to unix time (be sure to look up what unix time even is!!!)
+    var formatSix = moment(randomDate).valueOf();
+    console.log(formatSix);
+    // 5 ...to determine what day of the week and what week of the year this randomDate falls on.
+    var formatSeven = moment(randomDate).format('dddd');
+    console.log(formatSeven);
+
+    // If you finish early...
+    // Start creating HTML inputs and then redisplay the dates using moment.js elsewhere on the page.
+  </script>
+
+</body>
+
+</html>

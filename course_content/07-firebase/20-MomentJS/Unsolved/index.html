@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Data Management</title>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script> <!-- include font awesome library for icons -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> <!-- include bootstrap library for bootstrap css -->
+    <!-- include moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.0/moment.js"></script>
+    <!-- google font -->
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+    <style>
+        body {
+          font-family: 'Josefin Sans', sans-serif;
+        }
+        .jumbotron {
+          background-color: black;
+        }
+        .jumbotron h1, .jumbotron h3 {
+          color: white;
+        }
+        .jumbotron h3 {
+          font-size: 16px;
+        }
+        .jumbotron .title {
+          margin-top: 50px;
+        }
+        .panel-heading {
+          background-color: #25437B;
+          color: white;
+          border-top-left-radius: 5px;
+          border-top-right-radius: 5px;
+        }
+        .panel-heading {
+          padding: 20px;
+        }
+        .panel-body {
+          border: 1px solid #25437B;
+          border-bottom-right-radius: 5px;
+          border-bottom-left-radius: 5px;
+          padding: 20px;
+        }
+        .results-panel {
+          margin-top: 40px;
+        }
+        small {
+          font-size: 50%;
+          opacity: .3;
+        }
+        table {
+          width: 100%;
+        }
+        .jumbotron img {
+          height: 250px;
+          border: 3px solid #efefef;
+          border-radius: 10px;
+          background-color: #FAD238;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="jumbotron text-center">
+            <h1><strong>Employee Data Management</strong></h1>
+            <h3>A Comprehensive Directory of Employee Billable Hours</h3>
+        </div><!-- end jumbotron -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Current Employee</h3>
+            </div>
+            <div class="panel-body">
+                <table id="employee-table" class="table">
+                    <thead>
+                      <tr>
+                        <th>Employee Name</th>
+                        <th>Role</th>
+                        <th>Start Date</th>
+                        <th>Months Worked</th>
+                        <th>Monthly Rate ($)</th>
+                        <th>Total Billed ($)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <!-- our records will go here -->
+                        <!-- example data -->
+                <!-- <tr>
+                          <td>Dummy name</td>
+                          <td>Dummy Role</td>
+                          <td>10</td>
+                          <td>100</td>
+                          <td>10</td>
+                          <td>100</td>
+                      </tr> -->
+                    </tbody>
+                </table><!-- end table -->
+            </div><!-- end form panel -->
+        </div><!-- end panel -->
+        <div class="panel panel-default results-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Add Employee</h3>
+            </div><!-- end panel heading -->
+            <div class="panel-body">
+                <form>
+                    <div class="form-group">
+                        <label>Employee Name</label>
+                        <input class="form-control" id="employee-name" placeholder="Employee Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <input class="form-control" id="role" placeholder="Role">
+                    </div>
+                    <div class="form-group">
+                        <label>Start Date (DD/MM/YY - ex. 01/01/89)</label>
+                        <input class="form-control" id="start-date" placeholder="01/01/89">
+                    </div>
+                    <div class="form-group">
+                        <label>Monthly Rate</label>
+                        <input class="form-control" id="monthly-rate" placeholder="Montly Rate">
+                    </div>
+                    <button type="submit" id="submit" class="btn btn-primary"> Submit</button>
+                </form><!-- end form -->
+            </div><!-- end form panel -->
+        </div><!-- end results-panel -->
+    </div><!-- end container -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> <!-- add jquery -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> <!-- add bootstrap js -->
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+  
+    <!-- custom js -->
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyB1UQF6wsqBQpQ4kHYf-pZ-lQadYSlI6sQ",
+        authDomain: "timesheet-155ca.firebaseapp.com",
+        databaseURL: "https://timesheet-155ca.firebaseio.com",
+        projectId: "timesheet-155ca",
+        storageBucket: "",
+        messagingSenderId: "536524746761"
+      };
+      firebase.initializeApp(config);
+      
+      var database = firebase.database();
+      
+      //capture form fields on submit
+      $(document).on('click', '#submit', function(event) {
+        event.preventDefault();
+        
+        var employeeName = $('#employee-name').val().trim();
+        var role = $('#role').val().trim();
+        var startDate = $('#start-date').val().trim();
+        var monthRate = $('#monthly-rate').val().trim();
+        
+        $('#employee-name').val('');
+        $('#role').val('');
+        $('#start-date').val('');
+        $('#monthly-rate').val('');
+        
+//         console.log(employeeName);
+//         console.log(role);
+//         console.log(startDate);
+//         console.log(monthRate);
+        var isStartDateValid = moment(startDate).isValid();
+        if(isStartDateValid) {
+          //push values to database
+          database.ref().push({
+            name: employeeName,
+            role: role,
+            start: startDate,
+            rate: monthRate,
+            dateAdded: firebase.database.ServerValue.TIMESTAMP
+          });          
+        } else {
+          console.log('your date is invalid!!!');
+        }
+
+      });
+      
+      database.ref().on('child_added', function(childSnapshot) {
+        // console.log(childSnapshot.val());
+        var employee = childSnapshot.val();
+        var employeeName = employee.name;
+        var rate = employee.rate;
+        var role = employee.role;
+        var startDate = employee.start;
+        var start = moment(startDate);
+        var monthsWorked = Math.abs(moment(start).diff(moment(), 'months'));
+        var totalBilled = Math.abs(rate * monthsWorked);
+        
+        
+        var html = `
+          <tr>
+              <td>${employeeName}</td>
+              <td>${role}</td> 
+              <td>${startDate}</td>
+              <td>${monthsWorked}</td>
+              <td>${rate}</td>
+              <td>${totalBilled}</td>
+          </tr>
+        `;
+        
+        $('#employee-table tbody').append(html);
+        
+      });
+
+    
+    // 
+   // Assume the following situations.
+
+    // (TEST 1)
+    // First Train of the Day is 3:00 AM
+    // Assume Train comes every 3 minutes.
+    // Assume the current time is 3:16 AM....
+    // What time would the next train be...? (Use your brain first)
+    // It would be 3:18 -- 2 minutes away
+
+    // (TEST 2)
+    // First Train of the Day is 3:00 AM
+    // Assume Train comes every 7 minutes.
+    // Assume the current time is 3:16 AM....
+    // What time would the next train be...? (Use your brain first)
+    // It would be 3:21 -- 5 minutes away
+
+
+    // ==========================================================
+
+    // Solved Mathematically
+    // Test case 1:
+    // 16 - 00 = 16
+    // 16 % 3 = 1 (Modulus is the remainder)
+    // 3 - 1 = 2 minutes away
+    // 2 + 3:16 = 3:18
+
+    // Solved Mathematically
+    // Test case 2:
+    // 16 - 00 = 16
+    // 16 % 7 = 2 (Modulus is the remainder)
+    // 7 - 2 = 5 minutes away
+    // 5 + 3:16 = 3:21
+
+    // Assumptions
+    var tFrequency = 3;
+
+    // Time is 3:30 AM
+    var firstTime = "03:30";
+
+    // First Time (pushed back 1 year to make sure it comes before current time)
+    var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "years");
+    console.log(firstTimeConverted);
+
+    // Current Time
+    var currentTime = moment();
+    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+
+    // Difference between the times
+    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+    console.log("DIFFERENCE IN TIME: " + diffTime);
+
+    // Time apart (remainder)
+    var tRemainder = diffTime % tFrequency;
+    console.log(tRemainder);
+
+    // Minute Until Train
+    var tMinutesTillTrain = tFrequency - tRemainder;
+    console.log("MINUTES TILL TRAIN: " + tMinutesTillTrain);
+
+    // Next Train
+    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+    
+
+    // Question:
+    // How many minutes away is the next train?
+      
+    </script>
+</body>
+</html>
